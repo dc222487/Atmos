@@ -90,6 +90,47 @@ body.rainy .forecast .day,
 body.cloudy .forecast .day {
   background: rgba(0, 0, 0, 0.25);
 }
+h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  background: linear-gradient(
+    -45deg,
+    #ffffff,
+    #d6bd3e,
+    #cf5153,
+    #567da0,
+    #4caaaf
+  );
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientShift 8s ease infinite, floatUp 4s ease-in-out infinite;
+  margin: 20px 0;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
 
 h2, h3, p {
   transition: color 0.5s;
@@ -275,4 +316,60 @@ button:active {
   pointer-events: none;
   transform: translate(-50%, -50%);
   transition: background-color 0.3s ease;
+}
+
+#weather-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none; /* lets user click through */
+  z-index: 0; /* behind your container */
+  overflow: hidden;
+}
+
+/* Container for rays */
+#weather-overlay.sunrays {
+  position: fixed;
+}
+
+.sunray {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2px; /* thickness of ray */
+  height: 200%;
+  background: rgb(255, 255, 0);
+  transform-origin: top center;
+}
+
+.sunrays-rotate {
+  animation: rotateSunrays 20s linear infinite;
+}
+
+@keyframes rotateSunrays {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Clouds effect */
+.clouds {
+  background: url(https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExamR2Yzd2OGQzbGFneTNqaDNvY2lqbDFneXdobzJoZnd4NzVvZWs3biZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/xT9IgsFcDKywF7orkI/giphy.gif); /* Example cloud PNG with transparency */
+  background-repeat: repeat-x;
+  background-size: cover;
+  animation: moveClouds 60s linear infinite;
+}
+
+@keyframes moveClouds {
+  from { background-position: 0 0; }
+  to { background-position: -1000px 0; }
+}
+
+/* Rain effect using CSS pseudo-elements */
+.rain {
+  background: url(https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExanIyamYxZmE4eDgxc2Rjaml3dW8yNGFzNHJydTA5aGVoYzF5bGx3NCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/3ohhwutQL0CDTq3kKA/giphy.gif);
+  background-size: cover;
+}
+
+@keyframes moveRain {
+  from { background-position: 0 0; }
+  to { background-position: 0 100px; }
 }

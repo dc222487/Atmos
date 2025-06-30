@@ -1,9 +1,24 @@
 const apiKey = 'PBNRLCVS7V32FYUJSVRTS575T';
 const form = document.getElementById('location-form');
+const overlay = document.getElementById('weather-overlay');
 const input = document.getElementById('location-input');
 const suggestionsDiv = document.getElementById('suggestions');
 const weatherDiv = document.getElementById('weather');
 const loadingDiv = document.getElementById('loading');
+
+const unit = detectUnit();
+console.log('Detected unit:', unit);
+
+function detectUnit() {
+  const locale = navigator.language || navigator.userLanguage;
+  const fahrenheitLocales = ['US', 'BS', 'BZ', 'KY', 'PW'];
+  const region = locale.split('-')[1];
+  if (region && fahrenheitLocales.includes(region.toUpperCase())) {
+    return 'imperial';
+  }
+  return 'metric';
+}
+
 
 // Suggest cities — uses Open-Meteo free geocoding
 async function fetchCitySuggestions(query) {
@@ -110,18 +125,30 @@ function getStargazingTip(forecast) {
 // Set dynamic gradient background
 function setBackground(condition) {
   document.body.className = ''; // clear existing
+  clearOverlay();
 
-  const cond = condition.toLowerCase();
+   const cond = condition.toLowerCase();
   if (cond.includes('clear') || cond.includes('sunny')) {
     document.body.classList.add('sunny');
+    addSunRays();
   } else if (cond.includes('rain') || cond.includes('showers')) {
     document.body.classList.add('rainy');
+    overlay.classList.add('rain');
   } else if (cond.includes('cloud')) {
     document.body.classList.add('cloudy');
+    overlay.classList.add('clouds');
   } else {
     document.body.classList.add('cloudy');
+    overlay.classList.add('clouds');
   }
 }
+
+function formatDate(dateStr) {
+  const [year, month, day] = dateStr.split('-').map(Number);
+  const date = new Date(year, month - 1, day);
+  return `${date.getDate()} ${date.toLocaleString('default', { month: 'short' })}`;
+}
+
 
 // Process weather data
 function processWeatherData(data) {
@@ -129,6 +156,8 @@ function processWeatherData(data) {
   const forecast = data.days.slice(1, 8).map(day => ({
     date: day.datetime,
     temp: day.temp,
+     tempmax: day.tempmax,
+    tempmin: day.tempmin,
     conditions: day.conditions,
     icon: day.icon
   }));
@@ -170,7 +199,7 @@ function displayWeather(info) {
 
   // Best hour
   html += `<h3>Best Time To Go Outside</h3>
-    <p>${info.bestHour.datetime} — ${info.bestHour.temp}°C, ${info.bestHour.conditions}</p>
+    <p>${info.bestHour.datetime} — ${info.bestHour.temp}°${unit === 'metric' ? 'C' : 'F'}, ${info.bestHour.conditions}</p>
   `;
 
   // Stargazing
@@ -182,8 +211,8 @@ function displayWeather(info) {
   info.forecast.forEach(day => {
     html += `
       <div class="day">
-        <p>${day.date}</p>
-        <p>${day.temp}°C — ${day.conditions}</p>
+        <p>${formatDate(day.date)}</p>
+        <p>${day.temp}°${unit === 'metric' ? 'C' : 'F'} — ${day.conditions}</p>
         ${day.icon ? `<img src="${iconURL(day.icon)}" alt="${day.conditions}" />` : ''}
       </div>
     `;
@@ -329,3 +358,22 @@ function animateTrail() {
 }
 
 animateTrail();
+
+function addSunRays() {
+  const overlay = document.getElementById('weather-overlay');
+  overlay.innerHTML = ''; // clear existing
+  const rayCount = 12; // number of rays
+  for (let i = 0; i < rayCount; i++) {
+    const ray = document.createElement('div');
+    ray.className = 'sunray';
+    ray.style.transform = `rotate(${(360 / rayCount) * i}deg)`;
+    overlay.appendChild(ray);
+  }
+  overlay.classList.add('sunrays-rotate');
+}
+
+function clearOverlay() {
+  const overlay = document.getElementById('weather-overlay');
+  overlay.innerHTML = '';
+  overlay.className = '';
+}
