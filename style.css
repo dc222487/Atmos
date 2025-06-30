@@ -1,0 +1,278 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  text-align: center;
+  font-family: Arial, sans-serif;
+  /* Smooth font rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 30px;
+  border-radius: 0;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.5s, color 0.5s;
+  
+  /* Fade in container */
+  opacity: 0;
+  animation: fadeIn 1s ease forwards;
+}
+
+.forecast .day {
+  background: #f9f9f9;
+  padding: 10px;
+  border-radius: 6px;
+  transition: background-color 0.5s, transform 0.3s;
+  cursor: default;
+  
+  /* Animate each day’s appearance with a slight scale & fade */
+  opacity: 0;
+  animation: fadeScaleIn 0.6s ease forwards;
+  animation-delay: 0.3s;
+}
+
+.forecast .day:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+  background-color: #e9f1ff;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+/* Stagger forecast days animation */
+.forecast .day:nth-child(1) { animation-delay: 0.3s; }
+.forecast .day:nth-child(2) { animation-delay: 0.45s; }
+.forecast .day:nth-child(3) { animation-delay: 0.6s; }
+.forecast .day:nth-child(4) { animation-delay: 0.75s; }
+.forecast .day:nth-child(5) { animation-delay: 0.9s; }
+.forecast .day:nth-child(6) { animation-delay: 1.05s; }
+.forecast .day:nth-child(7) { animation-delay: 1.2s; }
+
+/* Dynamic background gradients */
+body.sunny {
+  background: linear-gradient(to top right, #f9d423, #ff4e50);
+  color: #333;
+}
+
+body.rainy {
+  background: linear-gradient(to top right, #4facfe, #00f2fe);
+  color: #f0f0f0;
+}
+
+body.cloudy {
+  background: linear-gradient(to top right, #bdc3c7, #2c3e50);
+  color: #f0f0f0;
+}
+
+/* Container theme overrides */
+body.sunny .container {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+body.sunny .forecast .day {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+body.rainy .container,
+body.cloudy .container {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+body.rainy .forecast .day,
+body.cloudy .forecast .day {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+h2, h3, p {
+  transition: color 0.5s;
+  /* Soft fade on text */
+  opacity: 0;
+  animation: fadeInUp 1s ease forwards;
+  animation-delay: 1.4s;
+}
+
+a {
+  color: inherit;
+}
+.hidden {
+  display: none;
+}
+/* Input styling with smooth focus animation */
+input {
+  padding: 10px;
+  width: 70%;
+  margin-right: 10px;
+  border-radius: 12px;
+  border: 2px solid #ccc;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  font-size: 1rem;
+}
+
+input:focus {
+  outline: none;
+  border-color: #4facfe;
+  box-shadow: 0 0 8px rgba(79, 172, 254, 0.6);
+}
+
+/* Button styling with subtle hover bounce */
+button {
+  padding: 10px 15px;
+  border-radius: 12px;
+  border: none;
+  background-color: #4facfe;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background-color: #008cff;
+  transform: scale(1.05);
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+/* Loading text fade */
+#loading {
+  margin-top: 20px;
+  font-weight: bold;
+  opacity: 0;
+  animation: fadeIn 1s ease forwards;
+  animation-delay: 1.6s;
+}
+
+/* Suggestions dropdown */
+#suggestions {
+  width: 70%;
+  border: 1px solid #ccc;
+  max-height: 150px;
+  overflow-y: auto;
+  background: #fff;
+  text-align: left;
+  position: absolute;
+  color: black;
+  margin-left: 210px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  
+  /* Fade in dropdown */
+  opacity: 0;
+  animation: fadeIn 0.3s ease forwards;
+  animation-delay: 0.8s;
+  pointer-events: auto;
+}
+
+#suggestions div {
+  padding: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+#suggestions div:hover {
+  background: #f0f0f0;
+}
+
+/* Form container */
+#location-form {
+  position: relative;
+  margin-bottom: 10px;
+}
+
+/* Forecast grid */
+.forecast {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+  margin-top: 20px;
+}
+
+/* Weekly vibe text with gentle bounce */
+#weekly-vibe {
+  margin-top: 40px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  text-align: center;
+  padding: 10px 20px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(4px);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  transition: background-color 0.5s, color 0.5s;
+  
+  animation: bounce 3s infinite ease-in-out;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+#mouse-trail-container {
+  position: fixed;
+  top: 0; left: 0;
+  pointer-events: none;
+  width: 100vw;
+  height: 100vh;
+  overflow: visible;
+  z-index: 9999;
+}
+
+.trail-dot {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.24);
+  box-shadow: 0 0 8px 3px rgba(255, 255, 255, 0.24);
+  mix-blend-mode: screen;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: background-color 0.3s ease;
+}
