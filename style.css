@@ -1,36 +1,31 @@
-/* Universal box-sizing for reliable sizing */
-*, *::before, *::after {
-  box-sizing: border-box;
-}
-
 html, body {
+   width: 100%;
   height: 100%;
+  overflow-x: hidden;
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
+}
+
+body {
   text-align: center;
+  font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-body {
-  transition: background-color 0.5s, color 0.5s;
-}
-
-/* Smooth fade for main content container */
 .container {
-  max-width: 960px;
-  width: 90%;
-  margin: 0 auto;
+  min-height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
   padding: 30px;
   background-color: #fff;
-  border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   opacity: 0;
   animation: fadeIn 1s ease forwards;
+  position: relative; /* So z-index works well */
+  z-index: 1; /* Stay above background overlays */
 }
 
-/* Headings */
 h1 {
   font-size: 3rem;
   font-weight: 800;
@@ -42,31 +37,21 @@ h1 {
   margin: 20px 0;
 }
 
-h2, h3, p {
-  transition: color 0.5s;
-  opacity: 0;
-  animation: fadeInUp 1s ease forwards;
-  animation-delay: 1.4s;
-}
-
-a {
-  color: inherit;
-}
-
-/* Form container with relative positioning */
 #location-form {
-  position: relative;
-  margin-bottom: 20px;
+  position: relative; /* Needed for absolute suggestions */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
 }
 
 input {
   padding: 10px;
-  width: 70%;
-  max-width: 400px;
+  flex: 1 1 auto;
   border-radius: 12px;
   border: 2px solid #ccc;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
   font-size: 1rem;
-  transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 input:focus {
@@ -84,7 +69,8 @@ button {
   font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  flex: 0 0 auto;
 }
 
 button:hover {
@@ -96,6 +82,40 @@ button:active {
   transform: scale(0.95);
 }
 
+#suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  border: 1px solid #ccc;
+  max-height: 150px;
+  overflow-y: auto;
+  background: #fff;
+  text-align: left;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  opacity: 0;
+  animation: fadeIn 0.3s ease forwards;
+  animation-delay: 0.8s;
+  pointer-events: auto;
+  z-index: 10;
+  color: black;
+}
+
+#suggestions div {
+  padding: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+#suggestions div:hover {
+  background: #f0f0f0;
+}
+
+.hidden {
+  display: none;
+}
+
 #loading {
   margin-top: 20px;
   font-weight: bold;
@@ -104,39 +124,6 @@ button:active {
   animation-delay: 1.6s;
 }
 
-.hidden {
-  display: none;
-}
-
-/* Suggestions dropdown: RELATIVE TO FORM! */
-#suggestions {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 70%;
-  max-width: 400px;
-  border: 1px solid #ccc;
-  background: #fff;
-  z-index: 1000;
-  text-align: left;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  max-height: 150px;
-  overflow-y: auto;
-  pointer-events: auto;
-}
-
-#suggestions div {
-  padding: 8px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-#suggestions div:hover {
-  background: #f0f0f0;
-}
-
-/* Forecast grid */
 .forecast {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -149,7 +136,6 @@ button:active {
   padding: 10px;
   border-radius: 6px;
   cursor: default;
-  transition: background-color 0.3s, transform 0.3s;
   opacity: 0;
   animation: fadeScaleIn 0.6s ease forwards;
 }
@@ -168,7 +154,39 @@ button:active {
 .forecast .day:nth-child(6) { animation-delay: 1.05s; }
 .forecast .day:nth-child(7) { animation-delay: 1.2s; }
 
-/* Weekly vibe text */
+body.sunny {
+  background: linear-gradient(to top right, #f9d423, #ff4e50);
+  color: #333;
+}
+
+body.rainy {
+  background: linear-gradient(to top right, #4facfe, #00f2fe);
+  color: #f0f0f0;
+}
+
+body.cloudy {
+  background: linear-gradient(to top right, #bdc3c7, #2c3e50);
+  color: #f0f0f0;
+}
+
+body.sunny .container {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+body.sunny .forecast .day {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+body.rainy .container,
+body.cloudy .container {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+body.rainy .forecast .day,
+body.cloudy .forecast .day {
+  background: rgba(0, 0, 0, 0.25);
+}
+
 #weekly-vibe {
   margin-top: 40px;
   font-size: 1.3rem;
@@ -181,58 +199,11 @@ button:active {
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
-  transition: background-color 0.5s, color 0.5s;
   animation: bounce 3s infinite ease-in-out;
 }
 
-/* Dynamic theme backgrounds */
-body.sunny {
-  background: linear-gradient(to top right, #f9d423, #ff4e50);
-  color: #333;
-}
-
-body.sunny .container {
-  background-color: rgba(255, 255, 255, 0.9);
-}
-
-body.sunny .forecast .day {
-  background: rgba(255, 255, 255, 0.8);
-}
-
-body.rainy {
-  background: linear-gradient(to top right, #4facfe, #00f2fe);
-  color: #f0f0f0;
-}
-
-body.rainy .container {
-  background-color: rgba(0, 0, 0, 0.4);
-}
-
-body.rainy .forecast .day {
-  background: rgba(0, 0, 0, 0.25);
-}
-
-body.cloudy {
-  background: linear-gradient(to top right, #bdc3c7, #2c3e50);
-  color: #f0f0f0;
-}
-
-body.cloudy .container {
-  background-color: rgba(0, 0, 0, 0.4);
-}
-
-body.cloudy .forecast .day {
-  background: rgba(0, 0, 0, 0.25);
-}
-
-/* Animations */
 @keyframes fadeIn {
   to { opacity: 1; }
-}
-
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes fadeScaleIn {
@@ -247,9 +218,9 @@ body.cloudy .forecast .day {
 }
 
 @keyframes floatUp {
-  0% { transform: translateY(0); }
+  0% { transform: translateY(0px); }
   50% { transform: translateY(-8px); }
-  100% { transform: translateY(0); }
+  100% { transform: translateY(0px); }
 }
 
 @keyframes bounce {
@@ -257,14 +228,24 @@ body.cloudy .forecast .day {
   50% { transform: translateY(-8px); }
 }
 
-/* Mouse trail & overlays (same as before) */
+/* Overlay & mouse trail layers */
 #mouse-trail-container {
   position: fixed;
   top: 0; left: 0;
+  pointer-events: none;
   width: 100vw;
   height: 100vh;
-  pointer-events: none;
   z-index: 9999;
+}
+
+#weather-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+   width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .trail-dot {
@@ -276,14 +257,6 @@ body.cloudy .forecast .day {
   box-shadow: 0 0 8px 3px rgba(255, 255, 255, 0.24);
   mix-blend-mode: screen;
   transform: translate(-50%, -50%);
-}
-
-#weather-overlay {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  pointer-events: none;
-  z-index: 0;
-  overflow: hidden;
 }
 
 .sunray {
