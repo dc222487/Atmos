@@ -1,106 +1,40 @@
+/* Universal box-sizing for reliable sizing */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-}
-
-body {
-  text-align: center;
   font-family: Arial, sans-serif;
-  /* Smooth font rendering */
+  text-align: center;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-.container {
-  height: 100%;
-  width: 100%;
-  box-sizing: border-box;
-  padding: 30px;
-  border-radius: 0;
-  background-color: #fff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+body {
   transition: background-color 0.5s, color 0.5s;
-  
-  /* Fade in container */
+}
+
+/* Smooth fade for main content container */
+.container {
+  max-width: 960px;
+  width: 90%;
+  margin: 0 auto;
+  padding: 30px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   opacity: 0;
   animation: fadeIn 1s ease forwards;
 }
 
-.forecast .day {
-  background: #f9f9f9;
-  padding: 10px;
-  border-radius: 6px;
-  transition: background-color 0.5s, transform 0.3s;
-  cursor: default;
-  
-  /* Animate each day’s appearance with a slight scale & fade */
-  opacity: 0;
-  animation: fadeScaleIn 0.6s ease forwards;
-  animation-delay: 0.3s;
-}
-
-.forecast .day:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 16px rgba(0,0,0,0.12);
-  background-color: #e9f1ff;
-  transition: background-color 0.3s, transform 0.3s;
-}
-
-/* Stagger forecast days animation */
-.forecast .day:nth-child(1) { animation-delay: 0.3s; }
-.forecast .day:nth-child(2) { animation-delay: 0.45s; }
-.forecast .day:nth-child(3) { animation-delay: 0.6s; }
-.forecast .day:nth-child(4) { animation-delay: 0.75s; }
-.forecast .day:nth-child(5) { animation-delay: 0.9s; }
-.forecast .day:nth-child(6) { animation-delay: 1.05s; }
-.forecast .day:nth-child(7) { animation-delay: 1.2s; }
-
-/* Dynamic background gradients */
-body.sunny {
-  background: linear-gradient(to top right, #f9d423, #ff4e50);
-  color: #333;
-}
-
-body.rainy {
-  background: linear-gradient(to top right, #4facfe, #00f2fe);
-  color: #f0f0f0;
-}
-
-body.cloudy {
-  background: linear-gradient(to top right, #bdc3c7, #2c3e50);
-  color: #f0f0f0;
-}
-
-/* Container theme overrides */
-body.sunny .container {
-  background-color: rgba(255, 255, 255, 0.9);
-}
-
-body.sunny .forecast .day {
-  background: rgba(255, 255, 255, 0.8);
-}
-
-body.rainy .container,
-body.cloudy .container {
-  background-color: rgba(0, 0, 0, 0.4);
-}
-
-body.rainy .forecast .day,
-body.cloudy .forecast .day {
-  background: rgba(0, 0, 0, 0.25);
-}
+/* Headings */
 h1 {
   font-size: 3rem;
   font-weight: 800;
-  background: linear-gradient(
-    -45deg,
-    #ffffff,
-    #d6bd3e,
-    #cf5153,
-    #567da0,
-    #4caaaf
-  );
+  background: linear-gradient(-45deg, #ffffff, #d6bd3e, #cf5153, #567da0, #4caaaf);
   background-size: 400% 400%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -108,33 +42,8 @@ h1 {
   margin: 20px 0;
 }
 
-@keyframes gradientShift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-@keyframes floatUp {
-  0% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
-  100% {
-    transform: translateY(0px);
-  }
-}
-
 h2, h3, p {
   transition: color 0.5s;
-  /* Soft fade on text */
   opacity: 0;
   animation: fadeInUp 1s ease forwards;
   animation-delay: 1.4s;
@@ -143,18 +52,21 @@ h2, h3, p {
 a {
   color: inherit;
 }
-.hidden {
-  display: none;
+
+/* Form container with relative positioning */
+#location-form {
+  position: relative;
+  margin-bottom: 20px;
 }
-/* Input styling with smooth focus animation */
+
 input {
   padding: 10px;
   width: 70%;
-  margin-right: 10px;
+  max-width: 400px;
   border-radius: 12px;
   border: 2px solid #ccc;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
   font-size: 1rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 input:focus {
@@ -163,7 +75,6 @@ input:focus {
   box-shadow: 0 0 8px rgba(79, 172, 254, 0.6);
 }
 
-/* Button styling with subtle hover bounce */
 button {
   padding: 10px 15px;
   border-radius: 12px;
@@ -173,7 +84,7 @@ button {
   font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: background-color 0.3s, transform 0.2s;
 }
 
 button:hover {
@@ -185,7 +96,6 @@ button:active {
   transform: scale(0.95);
 }
 
-/* Loading text fade */
 #loading {
   margin-top: 20px;
   font-weight: bold;
@@ -194,41 +104,36 @@ button:active {
   animation-delay: 1.6s;
 }
 
-/* Suggestions dropdown */
+.hidden {
+  display: none;
+}
+
+/* Suggestions dropdown: RELATIVE TO FORM! */
 #suggestions {
-  width: 70%;
-  border: 1px solid #ccc;
-  max-height: 150px;
-  overflow-y: auto;
-  background: #fff;
-  text-align: left;
   position: absolute;
-  color: black;
-  margin-left: 210px;
+  top: 100%;
+  left: 0;
+  width: 70%;
+  max-width: 400px;
+  border: 1px solid #ccc;
+  background: #fff;
+  z-index: 1000;
+  text-align: left;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  
-  /* Fade in dropdown */
-  opacity: 0;
-  animation: fadeIn 0.3s ease forwards;
-  animation-delay: 0.8s;
+  max-height: 150px;
+  overflow-y: auto;
   pointer-events: auto;
 }
 
 #suggestions div {
   padding: 8px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s;
 }
 
 #suggestions div:hover {
   background: #f0f0f0;
-}
-
-/* Form container */
-#location-form {
-  position: relative;
-  margin-bottom: 10px;
 }
 
 /* Forecast grid */
@@ -239,7 +144,31 @@ button:active {
   margin-top: 20px;
 }
 
-/* Weekly vibe text with gentle bounce */
+.forecast .day {
+  background: #f9f9f9;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: default;
+  transition: background-color 0.3s, transform 0.3s;
+  opacity: 0;
+  animation: fadeScaleIn 0.6s ease forwards;
+}
+
+.forecast .day:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+  background-color: #e9f1ff;
+}
+
+.forecast .day:nth-child(1) { animation-delay: 0.3s; }
+.forecast .day:nth-child(2) { animation-delay: 0.45s; }
+.forecast .day:nth-child(3) { animation-delay: 0.6s; }
+.forecast .day:nth-child(4) { animation-delay: 0.75s; }
+.forecast .day:nth-child(5) { animation-delay: 0.9s; }
+.forecast .day:nth-child(6) { animation-delay: 1.05s; }
+.forecast .day:nth-child(7) { animation-delay: 1.2s; }
+
+/* Weekly vibe text */
 #weekly-vibe {
   margin-top: 40px;
   font-size: 1.3rem;
@@ -253,55 +182,88 @@ button:active {
   margin-left: auto;
   margin-right: auto;
   transition: background-color 0.5s, color 0.5s;
-  
   animation: bounce 3s infinite ease-in-out;
+}
+
+/* Dynamic theme backgrounds */
+body.sunny {
+  background: linear-gradient(to top right, #f9d423, #ff4e50);
+  color: #333;
+}
+
+body.sunny .container {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+body.sunny .forecast .day {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+body.rainy {
+  background: linear-gradient(to top right, #4facfe, #00f2fe);
+  color: #f0f0f0;
+}
+
+body.rainy .container {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+body.rainy .forecast .day {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+body.cloudy {
+  background: linear-gradient(to top right, #bdc3c7, #2c3e50);
+  color: #f0f0f0;
+}
+
+body.cloudy .container {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+body.cloudy .forecast .day {
+  background: rgba(0, 0, 0, 0.25);
 }
 
 /* Animations */
 @keyframes fadeIn {
-  to {
-    opacity: 1;
-  }
+  to { opacity: 1; }
 }
 
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes fadeScaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+  100% { transform: translateY(0); }
 }
 
 @keyframes bounce {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
 }
 
+/* Mouse trail & overlays (same as before) */
 #mouse-trail-container {
   position: fixed;
   top: 0; left: 0;
-  pointer-events: none;
   width: 100vw;
   height: 100vh;
-  overflow: visible;
+  pointer-events: none;
   z-index: 9999;
 }
 
@@ -313,31 +275,24 @@ button:active {
   background: rgba(255, 255, 255, 0.24);
   box-shadow: 0 0 8px 3px rgba(255, 255, 255, 0.24);
   mix-blend-mode: screen;
-  pointer-events: none;
   transform: translate(-50%, -50%);
-  transition: background-color 0.3s ease;
 }
 
 #weather-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  pointer-events: none; /* lets user click through */
-  z-index: 0; /* behind your container */
+  pointer-events: none;
+  z-index: 0;
   overflow: hidden;
-}
-
-/* Container for rays */
-#weather-overlay.sunrays {
-  position: fixed;
 }
 
 .sunray {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 2px; /* thickness of ray */
+  width: 2px;
   height: 200%;
-  background: rgb(255, 255, 0);
+  background: yellow;
   transform-origin: top center;
 }
 
